@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using static System.Formats.Asn1.AsnWriter;
 using Newtonsoft.Json;
+using System.Data;
 
 namespace TextRPG
 {
@@ -22,7 +23,7 @@ namespace TextRPG
             {
                 Console.Clear();
 
-                Console.WriteLine("상태보기");
+                Console.WriteLine("[상태보기]");
                 Console.WriteLine("캐릭터의 정보가 표시됩니다.");
                 Console.WriteLine();
                 Console.WriteLine("Lv. {0}", warrior.Level);
@@ -59,7 +60,7 @@ namespace TextRPG
             {
                 Console.Clear();
 
-                Console.WriteLine("인벤토리");
+                Console.WriteLine("[인벤토리]");
                 Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
                 Console.WriteLine();
                 Console.WriteLine("[아이템 목록]");
@@ -118,7 +119,7 @@ namespace TextRPG
             {
                 Console.Clear();
 
-                Console.WriteLine("인벤토리 - 장착관리");
+                Console.WriteLine("[인벤토리 - 장착관리]");
                 Console.WriteLine("보유 중인 아이템 장착을 관리할 수 있습니다.");
                 Console.WriteLine();
                 Console.WriteLine("[아이템 목록]");
@@ -216,7 +217,7 @@ namespace TextRPG
             {
                 Console.Clear();
 
-                Console.WriteLine("상점");
+                Console.WriteLine("[상점]");
                 Console.WriteLine("아이템을 구매, 판매할 수 있는 상점입니다.");
 
                 Console.WriteLine();
@@ -276,7 +277,7 @@ namespace TextRPG
             {
                 Console.Clear();
 
-                Console.WriteLine("상점 - 아이템 구매");
+                Console.WriteLine("[상점 - 아이템 구매]");
                 Console.WriteLine("구매할 아이템을 선택하세요,");
                 Console.WriteLine();
                 Console.WriteLine("[아이템 목록]");
@@ -352,7 +353,7 @@ namespace TextRPG
             {
                 Console.Clear();
 
-                Console.WriteLine("상점 - 아이템 판매");
+                Console.WriteLine("[상점 - 아이템 판매]");
                 Console.WriteLine("판매할 아이템을 선택하세요.");
                 Console.WriteLine();
                 Console.WriteLine("[아이템 목록]");
@@ -425,7 +426,7 @@ namespace TextRPG
             {
                 Console.Clear();
 
-                Console.WriteLine("휴식하기");
+                Console.WriteLine("[휴식하기]");
                 Console.WriteLine("500 G 를 내면 체력을 회복할 수 있습니다.");
                 Console.WriteLine();
                 Console.WriteLine("[보유 골드] : " + warrior.Gold + " G");
@@ -480,9 +481,13 @@ namespace TextRPG
 
                 Console.Clear();
 
-                Console.WriteLine("던전");
+                Console.WriteLine("[던전]");
                 Console.WriteLine("입장할 난이도를 선택해주세요.");
                 Console.WriteLine();
+                Console.WriteLine($"[레벨] : {warrior.Level} Lv  [방어력] : {warrior.DefensivePower}  [골드] : {warrior.Gold} G");
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine("[난이도]");
                 Console.WriteLine();
                 Console.WriteLine($"1. 쉬움    | 권장 방어력 : {warrior.DefensivePower - 5}    | 보상 : 1000 G");
                 Console.WriteLine($"2. 적정    | 권장 방어력 : {warrior.DefensivePower}    | 보상 : 1700 G");
@@ -552,7 +557,7 @@ namespace TextRPG
                     warrior.ClearCount++;
 
                     // 보상 지급 - 난이도 별 차등 지급
-                    warrior.Gold = reward + (reward / 100 * random.Next(warrior.Attack, warrior.Attack * 2));
+                    warrior.Gold += (reward + (reward / 100 * random.Next(warrior.Attack, warrior.Attack * 2)));
 
                     Thread.Sleep(1200);
                     LevelUp(warrior); // 레벨업 유효 검사
@@ -627,36 +632,58 @@ namespace TextRPG
             Monster monster = new Monster();
             Store store = new Store();
 
-            // 델리게이트 기능 추가(연결)
+            // !!!!!!! 델리게이트 기능 추가(연결) - 아직 사용 x, 추후 전투 기능 업데이트 예정
             warrior.OnAttack += monster.TakeDamage;
             monster.OnAttack += warrior.TakeDamage;
 
-            // ------------------- 시작창 -------------------
-            Console.WriteLine("TextRPG 게임을 시작합니다.");
-            // 닉네임 설정
-            Console.WriteLine("닉네임을 입력해주세요.");
-            warrior.Name = Console.ReadLine();
+            // 저장 파일 이름 정하기
+            string filePath1 = "TextRPG_Player";
+            string filePath2 = "TextRPG_Item";
 
-            // ---------------- 캐릭터 직업 선택 -------------------
-            while (true)
+            // 저장 파일이 있으면 불러오기
+            if (File.Exists(filePath1))
             {
-                Console.Clear();
-                // 종족 선택
-                Console.WriteLine("종족을 선택해주세요.(해당 번호 입력)");
-                Console.WriteLine("1. 워리어");
+                string jsonData1 = File.ReadAllText(filePath1);
+                string jsonData2 = File.ReadAllText(filePath2);
+                warrior = JsonConvert.DeserializeObject<Warrior>(jsonData1);
+                store = JsonConvert.DeserializeObject<Store>(jsonData2);
+            }
+            else // 없으면 이름부터 적기
+            {
+                // ------------------- 시작창 -------------------
+                Console.WriteLine("TextRPG 게임을 처음 시작합니다.");
+                Console.WriteLine();
+                // 닉네임 설정
+                Console.WriteLine("닉네임을 입력해주세요.");
+                Console.WriteLine();
+                Console.Write(">> ");
+                warrior.Name = Console.ReadLine();
 
-                int select = InputCheck(1, 1);
-                switch (select)
+                // ---------------- 캐릭터 직업 선택 -------------------
+                while (true)
                 {
-                    case 1:
-                        warrior.Tribe = "전사";
-                        break;
-                    default:
-                        continue;
-                        break;
+                    Console.Clear();
+                    // 종족 선택
+                    Console.WriteLine("종족을 선택해주세요.(해당 번호 입력)");
+                    Console.WriteLine();
+                    Console.WriteLine("1. 워리어");
+                    Console.WriteLine();
+                    Console.Write(">> ");
+
+                    int select = InputCheck(1, 1);
+                    switch (select)
+                    {
+                        case 1:
+                            warrior.Tribe = "전사";
+                            break;
+                        default:
+                            continue;
+                            break;
+                    }
+
+                    if (select != -1) break;
                 }
 
-                if (select != -1) break; 
             }
 
             // ------------------- 게임 플레이 -------------------
@@ -682,6 +709,7 @@ namespace TextRPG
                         // 게임종료
                         Console.Clear();
                         Console.WriteLine("플레이해주셔서 감사합니다.");
+                        GameSave(warrior, store);
                         Environment.Exit(0);
                         break;
                     case 1:
