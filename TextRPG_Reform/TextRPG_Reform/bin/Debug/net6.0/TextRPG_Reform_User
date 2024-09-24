@@ -1,0 +1,14 @@
+{
+  "Name": "asd",
+  "Tribe": "인간",
+  "Health": 100,
+  "IsDead": false,
+  "Attack": 20,
+  "UserClass": "전사",
+  "Level": 3,
+  "DefensivePower": 20,
+  "Gold": 7830,
+  "ClearCount": 0,
+  "EquipArmor": false,
+  "EquipWeapon": false
+}
