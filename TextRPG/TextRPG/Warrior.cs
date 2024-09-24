@@ -56,7 +56,5 @@ namespace TextRPG
             this.EquipArmor = true;
             this.EquipWeapon = true;
         }
-
-       
     }
 }

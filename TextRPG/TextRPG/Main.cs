@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using static System.Formats.Asn1.AsnWriter;
+using Newtonsoft.Json;
 
 namespace TextRPG
 {
@@ -604,6 +605,19 @@ namespace TextRPG
             }
 
             return select;
+        }
+
+        // 게임 데이터 저장 메소드
+        static void GameSave(Warrior warrior, Store store)
+        {
+            string filePath1 = "TextRPG_Player";
+            string filePath2 = "TextRPG_Item";
+
+            string jsonData1 = JsonConvert.SerializeObject(warrior, Formatting.Indented);
+            File.WriteAllText(filePath1, jsonData1);
+
+            string jsonData2 = JsonConvert.SerializeObject(store, Formatting.Indented);
+            File.WriteAllText(filePath2, jsonData2);
         }
 
         static void Main(string[] args)

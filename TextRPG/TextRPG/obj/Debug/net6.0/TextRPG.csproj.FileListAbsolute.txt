@@ -28,3 +28,6 @@ C:\Git\CShap_Mini_Project\TextRPG\TextRPG\obj\Debug\net6.0\refint\TextRPG.dll
 C:\Git\CShap_Mini_Project\TextRPG\TextRPG\obj\Debug\net6.0\TextRPG.pdb
 C:\Git\CShap_Mini_Project\TextRPG\TextRPG\obj\Debug\net6.0\TextRPG.genruntimeconfig.cache
 C:\Git\CShap_Mini_Project\TextRPG\TextRPG\obj\Debug\net6.0\ref\TextRPG.dll
+C:\Git\CShap_Mini_Project\TextRPG\TextRPG\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Git\CShap_Mini_Project\TextRPG\TextRPG\obj\Debug\net6.0\TextRPG.csproj.AssemblyReference.cache
+C:\Git\CShap_Mini_Project\TextRPG\TextRPG\obj\Debug\net6.0\TextRPG.csproj.Up2Date
