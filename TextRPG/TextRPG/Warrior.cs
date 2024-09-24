@@ -50,7 +50,7 @@ namespace TextRPG
 
             this.Level = 1;
             this.DefensivePower = 5;
-            this.Gold = 15000;
+            this.Gold = 1500;
             this.ClearCount = 0;
 
             this.EquipArmor = true;

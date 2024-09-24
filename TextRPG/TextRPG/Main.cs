@@ -450,6 +450,7 @@ namespace TextRPG
                             Console.Clear();
                             Console.WriteLine("휴식을 완료했습니다.");
                             warrior.Gold -= 500;
+                            warrior.Health = 100; // 체력회복
                             Thread.Sleep(1200);
                         }
                         else
@@ -470,13 +471,94 @@ namespace TextRPG
         // 던전 메소드
         static void Dungeon(Warrior warrior)
         {
-            Console.Clear();
-            Console.WriteLine("던전을 클리어했습니다.");
-            warrior.ClearCount++;
-            Thread.Sleep(1200);
+            bool exit = false;
+            while (!exit)
+            {
+                int reward = 0; // 보상
+                int recomDef = 0;  // 권장 방어력
 
-            LevelUp(warrior); // 레벨업 유효 검사
+                Console.Clear();
+
+                Console.WriteLine("던전");
+                Console.WriteLine("입장할 난이도를 선택해주세요.");
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine($"1. 쉬움    | 권장 방어력 : {warrior.DefensivePower - 5}    | 보상 : 1000 G");
+                Console.WriteLine($"2. 적정    | 권장 방어력 : {warrior.DefensivePower}    | 보상 : 1700 G");
+                Console.WriteLine($"3. 어려움  | 권장 방어력 : {warrior.DefensivePower + 5}    | 보상 : 2500 G");
+                Console.WriteLine("0. 나가기");
+                Console.WriteLine();
+                Console.WriteLine("원하시는 행동을 입력해주세요.");
+                Console.Write(">> ");
+
+                int select = InputCheck(0, 3);
+
+                Random random = new Random();
+                // 던전 난이도에 따라 보상, 권장 난이도 설정
+                switch (select)
+                {
+                    case 0:
+                        exit = true;
+                        break;
+                    case 1:
+                        recomDef = warrior.DefensivePower - 5;
+                        reward = 1000;
+
+                        break;
+                    case 2:
+                        recomDef = warrior.DefensivePower;
+                        reward = 1700;
+                        break;
+                    case 3:
+                        // 40% 확률로 실패 계산, 성공해도 체력 차감에 따라 승패가 갈린다
+                        if (random.Next(1, 100) <= 40)
+                            warrior.IsDead = true; 
+                        recomDef = warrior.DefensivePower + 5;
+                        reward = 2500;
+                        break;
+                    default:
+                        continue;
+
+                }
+
+                if (exit == true) break;
+
+                int gap = warrior.DefensivePower - recomDef; // 유저 방어력 - 권장 방어력
+
+                warrior.Health -= random.Next((20 - gap), (35 - gap)); // 남는 체력 계산
+
+                // 체력이 0 이하면 실패
+                if(warrior.Health <= 0 || warrior.IsDead == true)
+                {
+                    // 죽으면 마을에서 부활
+                    Console.Clear();
+                    Console.WriteLine("던전 공략에 실패했습니다...");
+                    Console.WriteLine("조금 뒤 마을에서 부활 합니다.");
+
+                    warrior.Health = 100;
+                    warrior.IsDead = false;
+
+                    Thread.Sleep(1200);
+                    exit = true;
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("던전을 클리어했습니다!");
+                    Console.WriteLine($"[현재 체력] : {warrior.Health}");
+                    Console.WriteLine();
+                    Console.WriteLine("마을에서 휴식하기로 체력 회복 할 수 있습니다.");
+                    warrior.ClearCount++;
+
+                    // 보상 지급 - 난이도 별 차등 지급
+                    warrior.Gold = reward + (reward / 100 * random.Next(warrior.Attack, warrior.Attack * 2));
+
+                    Thread.Sleep(1200);
+                    LevelUp(warrior); // 레벨업 유효 검사
+                }
+            }
         }
+        
 
         // 레벨업 유효 검사 메소드
         static void LevelUp(Warrior warrior)
@@ -485,6 +567,9 @@ namespace TextRPG
             {
                 warrior.Level++;
                 warrior.ClearCount = 0;
+
+                warrior.DefensivePower += 5; // 레벨업 할 때마다 방어력 5씩 증가
+                warrior.Attack += 5; // 레벨업 할 때마다 공격력 5씩 증가
 
                 Console.Clear();
                 Console.WriteLine("축하합니다! 레벨업 했습니다.");
