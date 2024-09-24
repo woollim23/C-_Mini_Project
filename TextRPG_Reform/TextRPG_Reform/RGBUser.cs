@@ -9,7 +9,7 @@ namespace TextRPG_Reform
     // 플레이어 클래스
     public class RPGUser : ICharacter, IRPGUser
     {
-        // 캐릭터 인터페이스 공통
+        // ------------------ 캐릭터 인터페이스 공통 ------------------
         public String Name { get; set; } // 이름
         public String Tribe { get; set; } // 종족 : 인간, 고블린 등등
         public int Health { get; set; } // HP
@@ -22,7 +22,7 @@ namespace TextRPG_Reform
             Console.WriteLine("플레이어가 {0}의 데미지를 입었습니다.", damage);
         }
 
-        // 유저 인터페이스 공통
+        // ------------------ 유저 인터페이스 공통 ------------------
         public string UserClass { get; set; } // 직업
         public int Level { get; set; } // 레벨
         public int DefensivePower { get; set; } // 방어력
@@ -33,11 +33,54 @@ namespace TextRPG_Reform
         public bool EquipWeapon { get; set; } // 장착 무기 이름
 
 
-        // 전사 고유
+        // ------------------ 전사 고유 ------------------
         //public event AttackHandle OnAttack; // 공격 델리게이트 트리거
         public void WarriorAttack(int Attack) // 유저가 공격할때
         {
             //OnAttack?.Invoke(Attack); // 공격 델리게이트 트리거 - 몬스터의 TakeDamage와 묶임
+        }
+
+        // 상태창 메소드
+        public void State(RPGUser user)
+        {
+            bool exit = false;
+            while (!exit)
+            {
+                Console.Clear();
+
+                Console.WriteLine("[상태보기]");
+                Console.WriteLine("캐릭터의 정보가 표시됩니다.");
+                Console.WriteLine();
+                Console.WriteLine("레  벨 : {0} Lv", user.Level);
+                Console.Write("직  업 : {0}", user.UserClass);
+
+                if (user.UserClass == "좀도둑")
+                    Console.WriteLine("       ...왜 하필 이런 직업을... 특이하시군요. ㅍvㅍ");
+                else
+                    Console.Write("\n");
+
+                Console.WriteLine("공격력 : {0}", user.Attack);
+                Console.WriteLine("방어력 : {0}", user.DefensivePower);
+                Console.WriteLine("체  력 : {0}", user.Health);
+                Console.WriteLine("골  드 : {0} G", user.Gold);
+                Console.WriteLine();
+                Console.WriteLine("0. 나가기");
+                Console.WriteLine();
+                Console.WriteLine("원하시는 행동을 입력해주세요.");
+                Console.Write(">> ");
+
+                int select = InputCheck.Check(0, 0);
+
+                switch (select)
+                {
+                    case 0:
+                        exit = true;
+                        break;
+                    default:
+                        continue;
+
+                }
+            }
         }
 
 

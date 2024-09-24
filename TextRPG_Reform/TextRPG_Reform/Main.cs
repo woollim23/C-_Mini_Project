@@ -9,274 +9,6 @@ namespace TextRPG_Reform
 {
     internal class TextRPG_Reform
     {
-
-        // 파일 경로
-        static string filePath1 = "TextRPG_Reform_User";
-        static string filePath2 = "TextRPG_Reform_Item";
-
-        // 로딩창 메소드
-        static void LodingScreen()
-        {
-            Console.WriteLine("--------------------------------------");
-            Console.WriteLine("|                                    |");
-            Console.WriteLine("|             Wellcome!!             |");
-            Console.WriteLine("|          Sparta  TextRPG           |");
-            Console.WriteLine("|                                    |");
-            Console.WriteLine("--------------------------------------");
-
-            Thread.Sleep(1200);
-            Console.Clear();
-        }
-        // 시작창 메소드
-        static void StartScreen(RPGUser user)
-        {
-            // ------------------- 시작창 -------------------
-            Console.WriteLine("[계정 생성]");
-            Console.WriteLine("Sparta TextRPG 게임을 처음 시작합니다.");
-            Console.WriteLine();
-            // 닉네임 설정
-            Console.WriteLine("환영합니다. 모험가님!");
-            Console.WriteLine("사용하실 닉네임을 입력해주세요.");
-            Console.WriteLine();
-            Console.Write(">> ");
-            user.Name = Console.ReadLine();
-
-            ChoiceUserClass(user);
-        }
-
-        static void ChoiceUserClass(RPGUser user)
-        {
-            // ---------------- 캐릭터 직업 선택 -------------------
-            while (true)
-            {
-                Console.Clear();
-                Console.WriteLine("[직업 선택]");
-                // 종족 선택
-                Console.WriteLine("직업을 선택해주세요.(해당 번호 입력)");
-                Console.WriteLine();
-                Console.WriteLine("1. 전사");
-                Console.WriteLine("2. 좀도둑");
-                Console.WriteLine();
-                Console.Write(">> ");
-
-                int select = InputCheck(1, 2);
-                switch (select)
-                {
-                    case 1:
-                        user.UserClass = "전사";
-                        break;
-                    case 2:
-                        user.UserClass = "좀도둑"; // 좀도둑의 공격력과 방어력은 전사보다 약함
-                        user.Attack = 5;
-                        user.Gold = 3000; // 대신 초기자금이 더 많음
-                        user.DefensivePower = 5;
-                        break;
-                    default:
-                        break;
-                }
-
-                if (select != -1) break;
-            }
-        }
-
-        // 상태창 메소드
-        static void State(RPGUser user)
-        {
-            bool exit = false;
-            while (!exit)
-            {
-                Console.Clear();
-
-                Console.WriteLine("[상태보기]");
-                Console.WriteLine("캐릭터의 정보가 표시됩니다.");
-                Console.WriteLine();
-                Console.WriteLine("레  벨 : {0} Lv", user.Level);
-                Console.Write("직  업 : {0}", user.UserClass);
-
-                if (user.UserClass == "좀도둑")
-                    Console.WriteLine("       ...왜 하필 이런 직업을... 특이하시군요. ㅍvㅍ");
-                else
-                    Console.Write("\n");
-
-                Console.WriteLine("공격력 : {0}", user.Attack);
-                Console.WriteLine("방어력 : {0}", user.DefensivePower);
-                Console.WriteLine("체  력 : {0}", user.Health);
-                Console.WriteLine("골  드 : {0} G", user.Gold);
-                Console.WriteLine();
-                Console.WriteLine("0. 나가기");
-                Console.WriteLine();
-                Console.WriteLine("원하시는 행동을 입력해주세요.");
-                Console.Write(">> ");
-
-                int select = InputCheck(0, 0);
-
-                switch (select)
-                {
-                    case 0:
-                        exit = true;
-                        break;
-                    default:
-                        continue;
-
-                }
-            }
-        }
-
-        // 인벤토리 메소드
-        static void Inventory(RPGUser user, Item gameItem)
-        {
-            bool exit = false;
-            while (!exit)
-            {
-                Console.Clear();
-
-                Console.WriteLine("[인벤토리]");
-                Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
-                Console.WriteLine();
-                Console.WriteLine("[아이템 목록]");
-                Console.WriteLine();
-
-                int itemCount = 1; // 보유 아이템 갯수
-                for (int i = 0; gameItem.item[i] != null; i++)
-                {
-                    if (gameItem.item[i].buy == true)
-                    {
-                        Console.Write($"- {itemCount++} ");
-                        Console.Write($"{gameItem.item[i].name}");
-                        if (gameItem.item[i].equip == true)
-                            Console.Write("[E]");
-                        else
-                            Console.Write("\t");
-                        Console.Write($"\t| {gameItem.item[i].effect} +{gameItem.item[i].effectIfo}\t| {gameItem.item[i].func}");
-                        Console.WriteLine();
-                    }
-                }
-                Console.WriteLine();
-                Console.WriteLine("[보유 골드] : " + user.Gold + " G");
-                Console.WriteLine();
-
-                Console.WriteLine();
-                Console.WriteLine("1. 장착 관리");
-                Console.WriteLine("0. 나가기");
-                Console.WriteLine();
-                Console.WriteLine("원하시는 행동을 입력해주세요.");
-                Console.Write(">> ");
-
-                int select = InputCheck(0, 1);
-
-                switch (select)
-                {
-                    case 0:
-                        exit = true;
-                        break;
-                    case 1:
-                        // 장착관리
-                        ItemEquip(user, gameItem);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
-        // 장착관리 메소드
-        static void ItemEquip(RPGUser user, Item gameItem)
-        {
-            bool exit = false;
-            while (!exit)
-            {
-                Console.Clear();
-
-                Console.WriteLine("[인벤토리 - 장착관리]");
-                Console.WriteLine("보유 중인 아이템 장착을 관리할 수 있습니다.");
-                Console.WriteLine();
-                Console.WriteLine("[아이템 목록]");
-                Console.WriteLine();
-
-                int itemCount = 1;
-                for (int i = 0; gameItem.item[i] != null; i++)
-                {
-                    if (gameItem.item[i].buy == true)
-                    {
-                        gameItem.item[i].listNum = itemCount++;
-                        Console.Write($"- {gameItem.item[i].listNum} ");
-                        Console.Write($"{gameItem.item[i].name}");
-                        if (gameItem.item[i].equip == true)
-                            Console.Write("[E]");
-                        else
-                            Console.Write("\t");
-                        Console.Write($"\t| {gameItem.item[i].effect} +{gameItem.item[i].effectIfo}\t| {gameItem.item[i].func}");
-                        Console.WriteLine();
-                    }
-                }
-
-                Console.WriteLine();
-                Console.WriteLine("0. 나가기");
-                Console.WriteLine();
-                Console.WriteLine("원하시는 행동을 입력해주세요.");
-                Console.Write(">> ");
-
-                int select = InputCheck(0, itemCount - 1);
-
-                if (select == 0)
-                    break;
-                else if (select == -1)
-                    continue;
-                else
-                {
-                    int nCnt = 0;
-                    while (true) // 아이템 배열에서 선택된 아이템 찾는 중
-                    {
-                        if (select == gameItem.item[nCnt].listNum)
-                            break;
-                        else
-                            nCnt++;
-                    }
-
-                    // 장착 개선 
-                    if (gameItem.item[nCnt].equip == true)
-                    {
-                        // 장착 해제
-                        gameItem.item[nCnt].equip = false;
-                        if (gameItem.item[nCnt].effect == "방어력")
-                        {
-                            user.EquipArmor = false;
-                        }
-                        else if (gameItem.item[nCnt].effect == "공격력")
-                        {
-                            user.EquipWeapon = false;
-                        }
-                    }
-                    else
-                    {
-                        // 장착
-                        // 이전 장착한 아이템에 관련된 후처리
-                        for (int i = 0; gameItem.item[i] != null; i++)
-                        {
-                            if (gameItem.item[nCnt].effect == gameItem.item[i].effect)
-                                gameItem.item[i].equip = false;
-                        }
-                        // 지금 장착한 아이템에 관련된 후처리
-                        gameItem.item[nCnt].equip = true;
-                        if (gameItem.item[nCnt].effect == "방어력")
-                        {
-                            user.EquipArmor = true;
-                        }
-                        else if (gameItem.item[nCnt].effect == "공격력")
-                        {
-                            user.EquipWeapon = true;
-                        }
-                    }
-
-                    for (int i = 0; gameItem.item[i] != null; i++)
-                    {
-                        gameItem.item[nCnt].listNum = -1;
-                    }
-                }
-
-            }
-        }
-
         // 상점 메소드
         static void UseStore(RPGUser user, Item gameItem)
         {
@@ -315,7 +47,7 @@ namespace TextRPG_Reform
                 Console.WriteLine("원하시는 행동을 입력해주세요.");
                 Console.Write(">> ");
 
-                int select = InputCheck(0, 2);
+                int select = InputCheck.Check(0, 2);
 
                 switch (select)
                 {
@@ -375,7 +107,7 @@ namespace TextRPG_Reform
                 Console.WriteLine("원하시는 행동을 입력해주세요.");
                 Console.Write(">> ");
 
-                int select = InputCheck(0, itemCount - 1);
+                int select = InputCheck.Check(0, itemCount - 1);
 
                 if (select == 0)
                     break;
@@ -452,7 +184,7 @@ namespace TextRPG_Reform
                 Console.Write(">> ");
 
                 itemCount -= 1;
-                int select = InputCheck(0, itemCount);
+                int select = InputCheck.Check(0, itemCount);
 
                 if (select == 0)
                     break;
@@ -506,7 +238,7 @@ namespace TextRPG_Reform
                 Console.WriteLine("원하시는 행동을 입력해주세요.");
                 Console.Write(">> ");
 
-                int select = InputCheck(0, 1);
+                int select = InputCheck.Check(0, 1);
 
                 switch (select)
                 {
@@ -565,7 +297,7 @@ namespace TextRPG_Reform
                 Console.WriteLine("원하시는 행동을 입력해주세요.");
                 Console.Write(">> ");
 
-                int select = InputCheck(0, 3);
+                int select = InputCheck.Check(0, 3);
 
                 Random random = new Random();
                 // 던전 난이도에 따라 보상, 권장 난이도 설정
@@ -653,66 +385,23 @@ namespace TextRPG_Reform
             }
         }
 
-        // 입력  유효 검사 메소드
-        static int InputCheck(int start, int end)
-        {
-            int select = -1;
-            try
-            {
-                select = int.Parse(Console.ReadLine());
-
-                if (select < start || select > end)
-                {
-                    Console.Clear();
-                    Console.WriteLine("잘못된 입력입니다.");
-                    Thread.Sleep(1200);
-                    return -1;
-                }
-            }
-            catch (Exception) // C#에 이미 있는 포맷 입력한 데이터 형식이 잘못 되었을 때 실행
-            {
-                Console.Clear();
-                Console.WriteLine("잘못된 입력입니다.");
-                Thread.Sleep(1200);
-                return -1;
-            }
-
-            return select;
-        }
-
-        // 게임 데이터 저장 메소드
-        static void GameSave(RPGUser user, Item gameItem)
-        {
-            Console.Clear();
-
-            string jsonData1 = JsonConvert.SerializeObject(user, Formatting.Indented);
-            File.WriteAllText(filePath1, jsonData1);
-
-            string jsonData2 = JsonConvert.SerializeObject(gameItem, Formatting.Indented);
-            File.WriteAllText(filePath2, jsonData2);
-
-            Console.WriteLine("--------------------------------------");
-            Console.WriteLine("|                                    |");
-            Console.WriteLine("|         게임저장 완료!! ^0^/       |");
-            Console.WriteLine("|                                    |");
-            Console.WriteLine("--------------------------------------");
-            Thread.Sleep(1000);
-            Console.Clear();
-        }
-
         static void Main(string[] args)
         {
-            GameManager gameManager;
+            // ------------------- 게임 시작전 데이터 관리  -------------------
+            // 객체생성
+            GameManager gameManager = new GameManager();
+            Inventory inventory = new Inventory();
             RPGUser user;
             Item gameItem;
 
-            LodingScreen();
+            // 로딩창
+            gameManager.LodingScreen();
 
             // 저장 파일이 있으면 불러오기
-            if (File.Exists(filePath1))
+            if (File.Exists(gameManager.filePath1))
             {
-                string jsonData1 = File.ReadAllText(filePath1);
-                string jsonData2 = File.ReadAllText(filePath2);
+                string jsonData1 = File.ReadAllText(gameManager.filePath1); // 유저 정보
+                string jsonData2 = File.ReadAllText(gameManager.filePath2); // 아이템 정보
 
                 // 객체 생성, 데이터 불러오기
                 user = JsonConvert.DeserializeObject<RPGUser>(jsonData1);
@@ -725,7 +414,7 @@ namespace TextRPG_Reform
                 gameItem = new Item();
                 gameItem.AddItem();
                 // 최초 시작창
-                StartScreen(user);
+                gameManager.StartScreen(user);
             }
 
             // ------------------- 게임 플레이 -------------------
@@ -745,12 +434,12 @@ namespace TextRPG_Reform
                 Console.WriteLine("원하시는 행동을 입력해주세요.");
                 Console.Write(">> ");
 
-                int select = InputCheck(0, 6);
+                int select = InputCheck.Check(0, 6);
                 switch (select)
                 {
                     case 0:
                         // 게임종료
-                        GameSave(user, gameItem);
+                        gameManager.GameSave(user, gameItem);
                         Console.WriteLine("--------------------------------------");
                         Console.WriteLine("|                                    |");
                         Console.WriteLine("|     플레이 해주셔서 감사합니다!    |");
@@ -760,11 +449,11 @@ namespace TextRPG_Reform
                         break;
                     case 1:
                         // 상태창
-                        State(user);
+                        user.State(user);
                         break;
                     case 2:
                         // 인벤토리
-                        Inventory(user, gameItem);
+                        inventory.SeeInventory(user, gameItem);
                         break;
                     case 3:
                         // 상점이용
@@ -780,7 +469,7 @@ namespace TextRPG_Reform
                         break;
                     case 6:
                         // 게임저장
-                        GameSave(user, gameItem);
+                        gameManager.GameSave(user, gameItem);
                         break;
                     default:
                         continue;
