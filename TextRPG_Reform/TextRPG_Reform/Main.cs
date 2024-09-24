@@ -84,7 +84,10 @@ namespace TextRPG_Reform
                         break;
                     case 3:
                         // 상점이용
-                        store.UseStore(user, gameItem);
+                        if(user.UserClass == "좀도둑")
+                            store.UseStore_Thief(user, gameItem);
+                        else
+                            store.UseStore(user, gameItem);
                         break;
                     case 4:
                         // 던전입장
@@ -101,7 +104,6 @@ namespace TextRPG_Reform
                     default:
                         continue;
                 }
-
             }
         }
     }

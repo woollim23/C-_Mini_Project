@@ -216,5 +216,144 @@ namespace TextRPG_Reform
                 }
             }
         }
+
+        // 상점 이용 메소드 - 도둑 이스터에그
+        public void UseStore_Thief(RPGUser user, Item gameItem)
+        {
+            bool exit = false;
+            while (!exit)
+            {
+                Console.Clear();
+
+                Console.WriteLine("[상점]");
+                Console.WriteLine("아이템을 구매, 판매할 수 있는 상점입니다.");
+
+                Console.WriteLine();
+                Console.WriteLine("[아이템 목록]");
+                Console.WriteLine();
+
+                for (int i = 0; gameItem.item[i] != null; i++)
+                {
+                    Console.Write($"-  {gameItem.item[i].name}\t| ");
+                    if (gameItem.item[i].buy == true)
+                        Console.Write("구매완료");
+                    else
+                        Console.Write($"{gameItem.item[i].price} G  ");
+                    Console.Write($"\t| {gameItem.item[i].effect}+{gameItem.item[i].effectIfo}\t| {gameItem.item[i].func}");
+                    Console.WriteLine();
+                }
+
+                Console.WriteLine();
+                Console.WriteLine("[보유 골드] : " + user.Gold + " G");
+                Console.WriteLine();
+
+                Console.WriteLine();
+                Console.WriteLine("1. 아이템 구매");
+                Console.WriteLine("2. 아이템 판매");
+                Console.WriteLine("0. 나가기");
+                Console.WriteLine("-1. 훔치기!!!");
+                Console.WriteLine();
+                Console.WriteLine("원하시는 행동을 입력해주세요.");
+                Console.Write(">> ");
+
+                int select = InputCheck.Check(-1, 2);
+
+                switch (select)
+                {
+                    case -1:
+                        BuyItem_Thief(user, gameItem);
+                        break;
+                    case 0:
+                        exit = true;
+                        break;
+                    case 1:
+                        // 아이템 구매
+                        BuyItem(user, gameItem);
+                        break;
+                    case 2:
+                        // 아이템 판매
+                        SellItem(user, gameItem);
+                        break;
+                    default:
+                        continue;
+
+                }
+            }
+        }
+
+        // 아이템 구매 메소드 - 도둑 이스터에그
+        public void BuyItem_Thief(RPGUser user, Item gameItem)
+        {
+            bool exit = false;
+            while (!exit)
+            {
+                Console.Clear();
+
+                Console.WriteLine("[상점 - 훔치는중!!]");
+                Console.WriteLine("50퍼 확률로 훔치기를 시도하세요. ㅍvㅍ");
+                Console.WriteLine();
+                Console.WriteLine("[아이템 목록]");
+                Console.WriteLine();
+
+                int itemCount = 1;
+                for (int i = 0; gameItem.item[i] != null; i++)
+                {
+                    itemCount++;
+                    Console.Write($"- {i + 1} ");
+                    Console.Write($"{gameItem.item[i].name}\t| ");
+                    if (gameItem.item[i].buy == true)
+                        Console.Write("구매완료");
+                    else
+                        Console.Write($"{gameItem.item[i].price} G  ");
+                    Console.Write($"\t| {gameItem.item[i].effect}+{gameItem.item[i].effectIfo}\t| {gameItem.item[i].func}");
+                    Console.WriteLine();
+                }
+
+                Console.WriteLine();
+                Console.WriteLine("[보유 골드] : " + user.Gold + " G");
+                Console.WriteLine();
+
+                Console.WriteLine();
+                Console.WriteLine("0. 나가기");
+                Console.WriteLine();
+                Console.WriteLine("원하시는 행동을 입력해주세요.");
+                Console.Write(">> ");
+
+                int select = InputCheck.Check(0, itemCount - 1);
+
+                if (select == 0)
+                    break;
+                else if (select == -1)
+                    continue;
+                else
+                {
+                    // 수정 필요
+                    if (gameItem.item[select - 1].buy == true)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("이미 소유한 아이템 입니다.");
+                        Thread.Sleep(1200);
+                    }
+                    else
+                    {
+                        Random rand = new Random();
+                        if (rand.Next(1, 100) > 50)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("훔치기 성공!!! 상점 주인은 아무 것도 못봤습니다. ㅍvㅍ");
+                            gameItem.item[select - 1].buy = true;
+                            Thread.Sleep(1500);
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("이런! 들켰네요.. 잡히기 전에 도망갑시다!!");
+                            Thread.Sleep(1500);
+                        }
+                    }
+                }
+
+            }
+        }
     }
 }
