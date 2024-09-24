@@ -532,13 +532,13 @@ namespace TextRPG
             warrior.OnAttack += monster.TakeDamage;
             monster.OnAttack += warrior.TakeDamage;
 
-            // 시작창
+            // ------------------- 시작창 -------------------
             Console.WriteLine("TextRPG 게임을 시작합니다.");
             // 닉네임 설정
             Console.WriteLine("닉네임을 입력해주세요.");
             warrior.Name = Console.ReadLine();
 
-            // 캐릭터 직업 선택
+            // ---------------- 캐릭터 직업 선택 -------------------
             while (true)
             {
                 Console.Clear();
@@ -560,7 +560,7 @@ namespace TextRPG
                 if (select != -1) break; 
             }
 
-            // 게임 플레이
+            // ------------------- 게임 플레이 -------------------
             while (true)
             {
                 Console.Clear();
@@ -580,23 +580,29 @@ namespace TextRPG
                 switch (select)
                 {
                     case 0:
+                        // 게임종료
                         Console.Clear();
                         Console.WriteLine("플레이해주셔서 감사합니다.");
                         Environment.Exit(0);
                         break;
                     case 1:
+                        // 상태창
                         State(warrior);
                         break;
                     case 2:
+                        // 인벤토리
                         Inventory(warrior, store);
                         break;
                     case 3:
+                        // 상점이용
                         UseStore(warrior, store);
                         break;
                     case 4:
+                        // 던전입장
                         Dungeon(warrior);
                         break;
                     case 5:
+                        // 휴식이용
                         UseRest(warrior);
                         break;
                     default:
