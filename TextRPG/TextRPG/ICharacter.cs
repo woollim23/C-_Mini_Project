@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace TextRPG
 {
+    // 캐릭터 인터페이스
     public interface ICharacter
     {
         String Name { get; set; } // 이름
-        String Tribe { get; set; } // 종족 : Warrior or Monster
+        String Tribe { get; set; } // 종족 : RPGUser or Monster
         int Health { get; set; } // HP
         int Attack { get; set; } // 생존여부
         bool IsDead { get; set; } // 공격력

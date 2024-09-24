@@ -7,23 +7,24 @@ using static TextRPG.TextRPG;
 
 namespace TextRPG
 {
-    // 워리어(플레이어) 클래스
-    public class Warrior : ICharacter
+    // 플레이어 클래스
+    public class RPGUser : ICharacter, IRPGUser
     {
-        // 인터페이스 공통
+        // 캐릭터 인터페이스 공통
         public String Name { get; set; } // 이름
-        public String Tribe { get; set; } // 종족 : Warrior or Monster
+        public String Tribe { get; set; } // 종족 : 인간, 고블린 등등
         public int Health { get; set; } // HP
         public bool IsDead { get; set; } // 생존여부
         public int Attack { get; set; } // 공격력
 
-        public void TakeDamage(int damage) // 워리어가 피해 입었을 때
+        public void TakeDamage(int damage) // 피해 입었을 때
         {
             Health -= damage;
             Console.WriteLine("플레이어가 {0}의 데미지를 입었습니다.", damage);
         }
 
-        // 워리어 고유 기능들
+        // 유저 인터페이스 공통
+        public string UserClass { get; set; } // 직업
         public int Level { get; set; } // 레벨
         public int DefensivePower { get; set; } // 방어력
         public int Gold {  get; set; } // 골드
@@ -33,23 +34,25 @@ namespace TextRPG
         public bool EquipWeapon { get; set; } // 장착 무기 이름
 
 
+        // 전사 고유
         public event AttackHandle OnAttack; // 공격 델리게이트 트리거
-        public void WarriorAttack(int Attack) // 워리어가 공격할때
+        public void WarriorAttack(int Attack) // 유저가 공격할때
         {
             OnAttack?.Invoke(Attack); // 공격 델리게이트 트리거 - 몬스터의 TakeDamage와 묶임
         }
 
 
-        public Warrior()
+        public RPGUser()
         {
             this.Name = "홍길동";
-            this.Tribe = "전사";
+            this.Tribe = "인간";
+            this.UserClass = "전사";
             this.Health = 100;
             this.IsDead = false;
             this.Attack = 10;
 
             this.Level = 1;
-            this.DefensivePower = 5;
+            this.DefensivePower = 10;
             this.Gold = 1500;
             this.ClearCount = 0;
 

@@ -30,7 +30,7 @@ namespace TextRPG
             Console.Clear();
         }
         // 시작창 메소드
-        static void StartScreen(Warrior warrior)
+        static void StartScreen(RPGUser user)
         {
             // ------------------- 시작창 -------------------
             Console.WriteLine("[계정 생성]");
@@ -41,12 +41,12 @@ namespace TextRPG
             Console.WriteLine("사용하실 닉네임을 입력해주세요.");
             Console.WriteLine();
             Console.Write(">> ");
-            warrior.Name = Console.ReadLine();
+            user.Name = Console.ReadLine();
 
-            ChoiceTribe(warrior);
+            ChoiceUserClass(user);
         }
 
-        static void ChoiceTribe(Warrior warrior)
+        static void ChoiceUserClass(RPGUser user)
         {
             // ---------------- 캐릭터 직업 선택 -------------------
             while (true)
@@ -65,10 +65,13 @@ namespace TextRPG
                 switch (select)
                 {
                     case 1:
-                        warrior.Tribe = "전사";
+                        user.UserClass = "전사";
                         break;
                     case 2:
-                        warrior.Tribe = "좀도둑";
+                        user.UserClass = "좀도둑"; // 좀도둑의 공격력과 방어력은 전사보다 약함
+                        user.Attack = 5;
+                        user.Gold = 3000; // 대신 초기자금이 더 많음
+                        user.DefensivePower = 5;
                         break;
                     default:
                         continue;
@@ -80,7 +83,7 @@ namespace TextRPG
         }
 
         // 상태창 메소드
-        static void State(Warrior warrior)
+        static void State(RPGUser user)
         {
             bool exit = false;
             while (!exit)
@@ -90,18 +93,18 @@ namespace TextRPG
                 Console.WriteLine("[상태보기]");
                 Console.WriteLine("캐릭터의 정보가 표시됩니다.");
                 Console.WriteLine();
-                Console.WriteLine("레  벨 : {0} Lv", warrior.Level);
-                Console.Write("직  업 : {0}", warrior.Tribe);
+                Console.WriteLine("레  벨 : {0} Lv", user.Level);
+                Console.Write("직  업 : {0}", user.UserClass);
 
-                if (warrior.Tribe == "좀도둑")
+                if (user.UserClass == "좀도둑")
                     Console.WriteLine("       ...왜 하필 이런 직업을... 특이하시군요. ㅍvㅍ");
                 else
                     Console.Write("\n");
 
-                Console.WriteLine("공격력 : {0}", warrior.Attack);
-                Console.WriteLine("방어력 : {0}", warrior.DefensivePower);
-                Console.WriteLine("체  력 : {0}", warrior.Health);
-                Console.WriteLine("골  드 : {0} G", warrior.Gold);
+                Console.WriteLine("공격력 : {0}", user.Attack);
+                Console.WriteLine("방어력 : {0}", user.DefensivePower);
+                Console.WriteLine("체  력 : {0}", user.Health);
+                Console.WriteLine("골  드 : {0} G", user.Gold);
                 Console.WriteLine();
                 Console.WriteLine("0. 나가기");
                 Console.WriteLine();
@@ -123,7 +126,7 @@ namespace TextRPG
         }
 
         // 인벤토리 메소드
-        static void Inventory(Warrior warrior, Store store)
+        static void Inventory(RPGUser user, Store store)
         {
             bool exit = false;
             while (!exit)
@@ -152,7 +155,7 @@ namespace TextRPG
                     }
                 }
                 Console.WriteLine();
-                Console.WriteLine("[보유 골드] : " + warrior.Gold + " G");
+                Console.WriteLine("[보유 골드] : " + user.Gold + " G");
                 Console.WriteLine();
 
                 Console.WriteLine();
@@ -171,7 +174,7 @@ namespace TextRPG
                         break;
                     case 1:
                         // 장착관리
-                        ItemEquip(warrior, store);
+                        ItemEquip(user, store);
                         break;
                     default:
                         continue;
@@ -182,7 +185,7 @@ namespace TextRPG
         }
 
         // 장착관리 메소드
-        static void ItemEquip(Warrior warrior, Store store)
+        static void ItemEquip(RPGUser user, Store store)
         {
             bool exit = false;
             while (!exit)
@@ -242,11 +245,11 @@ namespace TextRPG
                         store.item[nCnt].equip = false;
                         if (store.item[nCnt].effect == "방어력")
                         {
-                            warrior.EquipArmor = false;
+                            user.EquipArmor = false;
                         }
                         else if (store.item[nCnt].effect == "공격력")
                         {
-                            warrior.EquipWeapon = false;
+                            user.EquipWeapon = false;
                         }
                     }
                     else
@@ -262,11 +265,11 @@ namespace TextRPG
                         store.item[nCnt].equip = true;
                         if (store.item[nCnt].effect == "방어력")
                         {
-                            warrior.EquipArmor = true;
+                            user.EquipArmor = true;
                         }
                         else if (store.item[nCnt].effect == "공격력")
                         {
-                            warrior.EquipWeapon = true;
+                            user.EquipWeapon = true;
                         }
                     }
 
@@ -280,7 +283,7 @@ namespace TextRPG
         }
 
         // 상점 메소드
-        static void UseStore(Warrior warrior, Store store)
+        static void UseStore(RPGUser user, Store store)
         {
             bool exit = false;
             while (!exit)
@@ -306,7 +309,7 @@ namespace TextRPG
                 }
 
                 Console.WriteLine();
-                Console.WriteLine("[보유 골드] : " + warrior.Gold + " G");
+                Console.WriteLine("[보유 골드] : " + user.Gold + " G");
                 Console.WriteLine();
 
                 Console.WriteLine();
@@ -326,11 +329,11 @@ namespace TextRPG
                         break;
                     case 1:
                         // 아이템 구매
-                        BuyItem(warrior, store);
+                        BuyItem(user, store);
                         break;
                     case 2:
                         // 아이템 판매
-                        SellItem(warrior, store);
+                        SellItem(user, store);
                         break;
                     default:
                         continue;
@@ -340,7 +343,7 @@ namespace TextRPG
         }
 
         // 아이템 구매 메소드
-        static void BuyItem(Warrior warrior, Store store)
+        static void BuyItem(RPGUser user, Store store)
         {
             bool exit = false;
             while (!exit)
@@ -368,7 +371,7 @@ namespace TextRPG
                 }
 
                 Console.WriteLine();
-                Console.WriteLine("[보유 골드] : " + warrior.Gold + " G");
+                Console.WriteLine("[보유 골드] : " + user.Gold + " G");
                 Console.WriteLine();
 
                 Console.WriteLine();
@@ -394,19 +397,19 @@ namespace TextRPG
                     }
                     else
                     {
-                        if(warrior.Gold >= store.item[select - 1].price)
+                        if(user.Gold >= store.item[select - 1].price)
                         {
                             Console.Clear();
                             Console.WriteLine("구매를 완료했습니다.");
                             store.item[select - 1].buy = true;
-                            warrior.Gold -= store.item[select - 1].price;
+                            user.Gold -= store.item[select - 1].price;
                             Thread.Sleep(1200);
                         }
                         else
                         {
                             Console.Clear();
                             Console.WriteLine("골드가 부족합니다.");
-                            Console.WriteLine($"[부족한 골드] : {store.item[select - 1].price - warrior.Gold} G");
+                            Console.WriteLine($"[부족한 골드] : {store.item[select - 1].price - user.Gold} G");
                             Thread.Sleep(1200);
                         }
                     }
@@ -416,7 +419,7 @@ namespace TextRPG
         }
 
         // 아이템 판매
-        static void SellItem(Warrior warrior, Store store)
+        static void SellItem(RPGUser user, Store store)
         {
             bool exit = false;
             while (!exit)
@@ -444,7 +447,7 @@ namespace TextRPG
                 }
 
                 Console.WriteLine();
-                Console.WriteLine("[보유 골드] : " + warrior.Gold + " G");
+                Console.WriteLine("[보유 골드] : " + user.Gold + " G");
                 Console.WriteLine();
 
                 Console.WriteLine();
@@ -474,7 +477,7 @@ namespace TextRPG
                     store.item[nCnt].buy = false;
                     store.item[nCnt].equip = false;
 
-                    warrior.Gold += store.item[nCnt].price;
+                    user.Gold += store.item[nCnt].price;
 
                     Console.Clear();
                     Console.WriteLine("[판매 수익] : " + store.item[nCnt].price + " G");
@@ -489,7 +492,7 @@ namespace TextRPG
         }
         
         // 휴식 메소드
-        static void UseRest(Warrior warrior)
+        static void UseRest(RPGUser user)
         {
             bool exit = false;
             while (!exit)
@@ -499,7 +502,7 @@ namespace TextRPG
                 Console.WriteLine("[휴식하기]");
                 Console.WriteLine("500 G 를 내면 체력을 회복할 수 있습니다.");
                 Console.WriteLine();
-                Console.WriteLine("[보유 골드] : " + warrior.Gold + " G");
+                Console.WriteLine("[보유 골드] : " + user.Gold + " G");
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine("1. 휴식하기");
@@ -517,19 +520,19 @@ namespace TextRPG
                         break;
                     case 1:
                         // 아이템 구매
-                        if (warrior.Gold >= 500)
+                        if (user.Gold >= 500)
                         {
                             Console.Clear();
                             Console.WriteLine("휴식을 완료했습니다.");
-                            warrior.Gold -= 500;
-                            warrior.Health = 100; // 체력회복
+                            user.Gold -= 500;
+                            user.Health = 100; // 체력회복
                             Thread.Sleep(1200);
                         }
                         else
                         {
                             Console.Clear();
                             Console.WriteLine("골드가 부족합니다.");
-                            Console.WriteLine($"[부족한 골드] : {500 - warrior.Gold} G");
+                            Console.WriteLine($"[부족한 골드] : {500 - user.Gold} G");
                             Thread.Sleep(1200);
                         }
                         break;
@@ -541,7 +544,7 @@ namespace TextRPG
         }
 
         // 던전 메소드
-        static void Dungeon(Warrior warrior)
+        static void Dungeon(RPGUser user)
         {
             bool exit = false;
             while (!exit)
@@ -554,14 +557,14 @@ namespace TextRPG
                 Console.WriteLine("[던전]");
                 Console.WriteLine("입장할 난이도를 선택해주세요.");
                 Console.WriteLine();
-                Console.WriteLine($"[레벨] : {warrior.Level} Lv  [방어력] : {warrior.DefensivePower}  [골드] : {warrior.Gold} G");
+                Console.WriteLine($"[레벨] : {user.Level} Lv  [방어력] : {user.DefensivePower}  [골드] : {user.Gold} G");
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine("[난이도]");
                 Console.WriteLine();
-                Console.WriteLine($"1. 쉬움    | 권장 방어력 : {warrior.DefensivePower - 5}    | 보상 : 1000 G");
-                Console.WriteLine($"2. 적정    | 권장 방어력 : {warrior.DefensivePower}    | 보상 : 1700 G");
-                Console.WriteLine($"3. 어려움  | 권장 방어력 : {warrior.DefensivePower + 5}    | 보상 : 2500 G");
+                Console.WriteLine($"1. 쉬움    | 권장 방어력 : {user.DefensivePower - 5}    | 보상 : 1000 G");
+                Console.WriteLine($"2. 적정    | 권장 방어력 : {user.DefensivePower}    | 보상 : 1700 G");
+                Console.WriteLine($"3. 어려움  | 권장 방어력 : {user.DefensivePower + 5}    | 보상 : 2500 G");
                 Console.WriteLine("0. 나가기");
                 Console.WriteLine();
                 Console.WriteLine("원하시는 행동을 입력해주세요.");
@@ -577,19 +580,19 @@ namespace TextRPG
                         exit = true;
                         break;
                     case 1:
-                        recomDef = warrior.DefensivePower - 5;
+                        recomDef = user.DefensivePower - 5;
                         reward = 1000;
 
                         break;
                     case 2:
-                        recomDef = warrior.DefensivePower;
+                        recomDef = user.DefensivePower;
                         reward = 1700;
                         break;
                     case 3:
                         // 40% 확률로 실패 계산, 성공해도 체력 차감에 따라 승패가 갈린다
                         if (random.Next(1, 100) <= 40)
-                            warrior.IsDead = true; 
-                        recomDef = warrior.DefensivePower + 5;
+                            user.IsDead = true; 
+                        recomDef = user.DefensivePower + 5;
                         reward = 2500;
                         break;
                     default:
@@ -599,20 +602,20 @@ namespace TextRPG
 
                 if (exit == true) break;
 
-                int gap = warrior.DefensivePower - recomDef; // 유저 방어력 - 권장 방어력
+                int gap = user.DefensivePower - recomDef; // 유저 방어력 - 권장 방어력
 
-                warrior.Health -= random.Next((20 - gap), (35 - gap)); // 남는 체력 계산
+                user.Health -= random.Next((20 - gap), (35 - gap)); // 남는 체력 계산
 
                 // 체력이 0 이하면 실패
-                if(warrior.Health <= 0 || warrior.IsDead == true)
+                if(user.Health <= 0 || user.IsDead == true)
                 {
                     // 죽으면 마을에서 부활
                     Console.Clear();
                     Console.WriteLine("던전 공략에 실패했습니다...");
                     Console.WriteLine("조금 뒤 마을에서 부활 합니다.");
 
-                    warrior.Health = 100;
-                    warrior.IsDead = false;
+                    user.Health = 100;
+                    user.IsDead = false;
 
                     Thread.Sleep(1200);
                     exit = true;
@@ -621,35 +624,35 @@ namespace TextRPG
                 {
                     Console.Clear();
                     Console.WriteLine("던전을 클리어했습니다!");
-                    Console.WriteLine($"[현재 체력] : {warrior.Health}");
+                    Console.WriteLine($"[현재 체력] : {user.Health}");
                     Console.WriteLine();
                     Console.WriteLine("마을에서 휴식하기로 체력 회복 할 수 있습니다.");
-                    warrior.ClearCount++;
+                    user.ClearCount++;
 
                     // 보상 지급 - 난이도 별 차등 지급
-                    warrior.Gold += (reward + (reward / 100 * random.Next(warrior.Attack, warrior.Attack * 2)));
+                    user.Gold += (reward + (reward / 100 * random.Next(user.Attack, user.Attack * 2)));
 
                     Thread.Sleep(1200);
-                    LevelUp(warrior); // 레벨업 유효 검사
+                    LevelUp(user); // 레벨업 유효 검사
                 }
             }
         }
         
 
         // 레벨업 유효 검사 메소드
-        static void LevelUp(Warrior warrior)
+        static void LevelUp(RPGUser user)
         {
-            if (warrior.Level == warrior.ClearCount)
+            if (user.Level == user.ClearCount)
             {
-                warrior.Level++;
-                warrior.ClearCount = 0;
+                user.Level++;
+                user.ClearCount = 0;
 
-                warrior.DefensivePower += 5; // 레벨업 할 때마다 방어력 5씩 증가
-                warrior.Attack += 5; // 레벨업 할 때마다 공격력 5씩 증가
+                user.DefensivePower += 5; // 레벨업 할 때마다 방어력 5씩 증가
+                user.Attack += 5; // 레벨업 할 때마다 공격력 5씩 증가
 
                 Console.Clear();
                 Console.WriteLine("축하합니다! 레벨업 했습니다.");
-                Console.WriteLine($"[현재 레벨] : {warrior.Level} Lv");
+                Console.WriteLine($"[현재 레벨] : {user.Level} Lv");
 
                 Thread.Sleep(1200);
             }
@@ -683,13 +686,13 @@ namespace TextRPG
         }
 
         // 게임 데이터 저장 메소드
-        static void GameSave(Warrior warrior, Store store)
+        static void GameSave(RPGUser user, Store store)
         {
             Console.Clear();
             string filePath1 = "TextRPG_Player";
             string filePath2 = "TextRPG_Item";
 
-            string jsonData1 = JsonConvert.SerializeObject(warrior, Formatting.Indented);
+            string jsonData1 = JsonConvert.SerializeObject(user, Formatting.Indented);
             File.WriteAllText(filePath1, jsonData1);
 
             string jsonData2 = JsonConvert.SerializeObject(store, Formatting.Indented);
@@ -706,16 +709,9 @@ namespace TextRPG
 
         static void Main(string[] args)
         {
-            // 객체 생성
-            Warrior warrior = new Warrior();
-            Monster monster = new Monster();
-            Store store = new Store();
-
-            // !!!!!!! 델리게이트 기능 추가(연결) - 아직 사용 x, 추후 전투 기능 업데이트 예정
-            warrior.OnAttack += monster.TakeDamage;
-            monster.OnAttack += warrior.TakeDamage;
-
-            // 저장 파일 이름 정하기
+            RPGUser user;
+            Store store;
+            // 저장 파일 이름
             string filePath1 = "TextRPG_Player";
             string filePath2 = "TextRPG_Item";
 
@@ -726,13 +722,18 @@ namespace TextRPG
             {
                 string jsonData1 = File.ReadAllText(filePath1);
                 string jsonData2 = File.ReadAllText(filePath2);
-                warrior = JsonConvert.DeserializeObject<Warrior>(jsonData1);
+
+                // 객체 생성, 데이터 불러오기
+                user = JsonConvert.DeserializeObject<RPGUser>(jsonData1);
                 store = JsonConvert.DeserializeObject<Store>(jsonData2);
             }
             else // 없으면 이름부터 적기
             {
+                // 객체 생성
+                user = new RPGUser();
+                store = new Store();
                 // 최초 시작창
-                StartScreen(warrior);
+                StartScreen(user);
             }
 
             // ------------------- 게임 플레이 -------------------
@@ -740,7 +741,7 @@ namespace TextRPG
             {
                 Console.Clear();
 
-                Console.WriteLine($"스파르타 마을에 오신 {warrior.Name} 님 환영합니다.\r\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
+                Console.WriteLine($"스파르타 마을에 오신 {user.Name} 님 환영합니다.\r\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
                 Console.WriteLine("1. 상태보기");
                 Console.WriteLine("2. 인벤토리");
                 Console.WriteLine("3. 상점");
@@ -757,7 +758,7 @@ namespace TextRPG
                 {
                     case 0:
                         // 게임종료
-                        GameSave(warrior, store);
+                        GameSave(user, store);
                         Console.WriteLine("--------------------------------------");
                         Console.WriteLine("|                                    |");
                         Console.WriteLine("|     플레이 해주셔서 감사합니다!    |");
@@ -767,27 +768,27 @@ namespace TextRPG
                         break;
                     case 1:
                         // 상태창
-                        State(warrior);
+                        State(user);
                         break;
                     case 2:
                         // 인벤토리
-                        Inventory(warrior, store);
+                        Inventory(user, store);
                         break;
                     case 3:
                         // 상점이용
-                        UseStore(warrior, store);
+                        UseStore(user, store);
                         break;
                     case 4:
                         // 던전입장
-                        Dungeon(warrior);
+                        Dungeon(user);
                         break;
                     case 5:
                         // 휴식이용
-                        UseRest(warrior);
+                        UseRest(user);
                         break;
                     case 6:
                         // 게임저장
-                        GameSave(warrior, store);
+                        GameSave(user, store);
                         break;
                     default:
                         continue;
