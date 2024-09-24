@@ -1,12 +1,12 @@
 {
-  "Name": "woollim",
-  "Tribe": "전사",
+  "Name": "asd",
+  "Tribe": "좀도둑",
   "Health": 100,
   "IsDead": false,
   "Attack": 10,
   "Level": 1,
   "DefensivePower": 5,
-  "Gold": 500,
+  "Gold": 1500,
   "ClearCount": 0,
   "EquipArmor": false,
   "EquipWeapon": false

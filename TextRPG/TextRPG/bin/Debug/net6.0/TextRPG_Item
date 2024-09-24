@@ -3,7 +3,7 @@
     {
       "name": "수련자 갑옷",
       "equip": false,
-      "buy": true,
+      "buy": false,
       "effect": "방어력",
       "effectIfo": 5,
       "func": "수련에 도움을 주는 갑옷입니다.",
