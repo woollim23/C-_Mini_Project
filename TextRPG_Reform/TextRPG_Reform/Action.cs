@@ -59,7 +59,6 @@ namespace TextRPG_Reform
                 }
             }
         }
-
         // 던전 메소드
         public void Dungeon(RPGUser user)
         {
@@ -154,7 +153,6 @@ namespace TextRPG_Reform
                 }
             }
         }
-
         // 레벨업 유효 검사 메소드
         public void LevelUp(RPGUser user)
         {

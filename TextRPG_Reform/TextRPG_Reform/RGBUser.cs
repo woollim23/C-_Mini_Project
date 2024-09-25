@@ -101,6 +101,6 @@ namespace TextRPG_Reform
 
             this.EquipArmorStatusNum = 0; // 장착 갑옷 상태수치
             this.EquipWeaponStatusNum = 0; // 장착 갑옷 상태수치
-    }
+        }
     }
 }
