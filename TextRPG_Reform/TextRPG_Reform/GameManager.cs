@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace TextRPG_Reform
 {
@@ -77,6 +79,75 @@ namespace TextRPG_Reform
                 }
 
                 if (select != -1) break;
+            }
+        }
+
+        public void GamePlay(RPGUser user, Item gameItem)
+        {
+            GameManager gameManager = new GameManager();
+            Inventory inventory = new Inventory();
+            Store store = new Store();
+            Action action = new Action();
+
+            while (true)
+            {
+                Console.Clear();
+
+                Console.WriteLine($"스파르타 마을에 오신 {user.Name} 님 환영합니다.\r\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
+                Console.WriteLine("1. 상태보기");
+                Console.WriteLine("2. 인벤토리");
+                Console.WriteLine("3. 상점");
+                Console.WriteLine("4. 던전입장");
+                Console.WriteLine("5. 휴식하기");
+                Console.WriteLine("6. 게임저장");
+                Console.WriteLine("0. 종료");
+                Console.WriteLine();
+                Console.WriteLine("원하시는 행동을 입력해주세요.");
+                Console.Write(">> ");
+
+                int select = InputCheck.Check(0, 6);
+                switch (select)
+                {
+                    case 0:
+                        // 게임종료
+                        gameManager.GameSave(user, gameItem);
+                        Console.WriteLine("--------------------------------------");
+                        Console.WriteLine("|                                    |");
+                        Console.WriteLine("|     플레이 해주셔서 감사합니다!    |");
+                        Console.WriteLine("|                                    |");
+                        Console.WriteLine("--------------------------------------");
+                        Environment.Exit(0);
+                        break;
+                    case 1:
+                        // 상태창
+                        user.State(user, gameItem);
+                        break;
+                    case 2:
+                        // 인벤토리
+                        inventory.SeeInventory(user, gameItem);
+                        break;
+                    case 3:
+                        // 상점이용
+                        if (user.UserClass == "좀도둑")
+                            store.UseStore_Thief(user, gameItem);
+                        else
+                            store.UseStore(user, gameItem);
+                        break;
+                    case 4:
+                        // 던전입장
+                        action.Dungeon(user);
+                        break;
+                    case 5:
+                        // 휴식이용
+                        action.UseRest(user);
+                        break;
+                    case 6:
+                        // 게임저장
+                        gameManager.GameSave(user, gameItem);
+                        break;
+                    default:
+                        continue;
+                }
             }
         }
 
