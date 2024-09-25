@@ -68,6 +68,7 @@ namespace TextRPG_Reform
         // 장착관리 메소드
         public void ItemEquip(RPGUser user, Item gameItem)
         {
+            Inventory inventory = new Inventory();
             bool exit = false;
             while (!exit)
             {
@@ -132,6 +133,7 @@ namespace TextRPG_Reform
                         {
                             user.EquipWeapon = false;
                         }
+                        inventory.LiftEffect(nCnt, user, gameItem);
                     }
                     else
                     {
@@ -139,10 +141,14 @@ namespace TextRPG_Reform
                         // 이전 장착한 아이템에 관련된 후처리
                         for (int i = 0; gameItem.item[i] != null; i++)
                         {
-                            if (gameItem.item[nCnt].effect == gameItem.item[i].effect)
+                            // 장착외 아이템은 장착 해제 처리
+                            if (gameItem.item[nCnt].effect == gameItem.item[i].effect && gameItem.item[i].equip == true)
+                            {
                                 gameItem.item[i].equip = false;
+                                inventory.LiftEffect(i, user, gameItem);
+                            }
                         }
-                        // 지금 장착한 아이템에 관련된 후처리
+                        //지금 장착한 아이템에 관련된 후처리
                         gameItem.item[nCnt].equip = true;
                         if (gameItem.item[nCnt].effect == "방어력")
                         {
@@ -152,6 +158,7 @@ namespace TextRPG_Reform
                         {
                             user.EquipWeapon = true;
                         }
+                        inventory.EquipEffect(nCnt, user, gameItem);
                     }
 
                     for (int i = 0; gameItem.item[i] != null; i++)
@@ -160,6 +167,32 @@ namespace TextRPG_Reform
                     }
                 }
 
+            }
+        }
+
+        // 장비 장착 메소드
+        public void EquipEffect(int num, RPGUser user, Item gameItem)
+        {
+            if (gameItem.item[num].effect == "방어력")
+            {
+                user.DefensivePower += gameItem.item[num].effectIfo;
+            }
+            else if (gameItem.item[num].effect == "공격력")
+            {
+                user.Attack += gameItem.item[num].effectIfo;
+            }
+        }
+
+        // 장비 해제
+        public void LiftEffect(int num, RPGUser user, Item gameItem)
+        {
+            if (gameItem.item[num].effect == "방어력")
+            {
+                user.DefensivePower -= gameItem.item[num].effectIfo;
+            }
+            else if (gameItem.item[num].effect == "공격력")
+            {
+                user.Attack -= gameItem.item[num].effectIfo;
             }
         }
     }

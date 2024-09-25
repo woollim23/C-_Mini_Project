@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -41,8 +42,9 @@ namespace TextRPG_Reform
         }
 
         // 상태창 메소드
-        public void State(RPGUser user)
+        public void State(RPGUser user, Item item)
         {
+
             bool exit = false;
             while (!exit)
             {
@@ -59,8 +61,8 @@ namespace TextRPG_Reform
                 else
                     Console.Write("\n");
 
-                Console.WriteLine("공격력 : {0}", user.Attack);
                 Console.WriteLine("방어력 : {0}", user.DefensivePower);
+                Console.WriteLine("공격력 : {0}", user.Attack);
                 Console.WriteLine("체  력 : {0}", user.Health);
                 Console.WriteLine("골  드 : {0} G", user.Gold);
                 Console.WriteLine();
@@ -82,6 +84,7 @@ namespace TextRPG_Reform
                 }
             }
         }
+
 
 
         public RPGUser()

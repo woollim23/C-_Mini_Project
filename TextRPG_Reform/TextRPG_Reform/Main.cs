@@ -76,7 +76,7 @@ namespace TextRPG_Reform
                         break;
                     case 1:
                         // 상태창
-                        user.State(user);
+                        user.State(user, gameItem);
                         break;
                     case 2:
                         // 인벤토리
