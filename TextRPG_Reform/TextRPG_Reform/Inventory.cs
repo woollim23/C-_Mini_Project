@@ -127,13 +127,12 @@ namespace TextRPG_Reform
                         gameItem.item[nCnt].equip = false;
                         if (gameItem.item[nCnt].effect == "방어력")
                         {
-                            user.EquipArmor = false;
+                            user.EquipArmorStatusNum = 0;
                         }
                         else if (gameItem.item[nCnt].effect == "공격력")
                         {
-                            user.EquipWeapon = false;
+                            user.EquipWeaponStatusNum = 0;
                         }
-                        inventory.LiftEffect(nCnt, user, gameItem);
                     }
                     else
                     {
@@ -145,54 +144,34 @@ namespace TextRPG_Reform
                             if (gameItem.item[nCnt].effect == gameItem.item[i].effect && gameItem.item[i].equip == true)
                             {
                                 gameItem.item[i].equip = false;
-                                inventory.LiftEffect(i, user, gameItem);
+                                if (gameItem.item[nCnt].effect == "방어력")
+                                {
+                                    user.EquipArmorStatusNum = 0;
+                                }
+                                else if (gameItem.item[nCnt].effect == "공격력")
+                                {
+                                    user.EquipWeaponStatusNum = 0;
+                                }
                             }
                         }
                         //지금 장착한 아이템에 관련된 후처리
                         gameItem.item[nCnt].equip = true;
                         if (gameItem.item[nCnt].effect == "방어력")
                         {
-                            user.EquipArmor = true;
+                            user.EquipArmorStatusNum = gameItem.item[nCnt].effectIfo;
                         }
                         else if (gameItem.item[nCnt].effect == "공격력")
                         {
-                            user.EquipWeapon = true;
+                            user.EquipWeaponStatusNum = gameItem.item[nCnt].effectIfo;
                         }
-                        inventory.EquipEffect(nCnt, user, gameItem);
                     }
 
+                    // 목록 번호 초기화
                     for (int i = 0; gameItem.item[i] != null; i++)
                     {
                         gameItem.item[nCnt].listNum = -1;
                     }
                 }
-
-            }
-        }
-
-        // 장비 장착 메소드
-        public void EquipEffect(int num, RPGUser user, Item gameItem)
-        {
-            if (gameItem.item[num].effect == "방어력")
-            {
-                user.DefensivePower += gameItem.item[num].effectIfo;
-            }
-            else if (gameItem.item[num].effect == "공격력")
-            {
-                user.Attack += gameItem.item[num].effectIfo;
-            }
-        }
-
-        // 장비 해제
-        public void LiftEffect(int num, RPGUser user, Item gameItem)
-        {
-            if (gameItem.item[num].effect == "방어력")
-            {
-                user.DefensivePower -= gameItem.item[num].effectIfo;
-            }
-            else if (gameItem.item[num].effect == "공격력")
-            {
-                user.Attack -= gameItem.item[num].effectIfo;
             }
         }
     }

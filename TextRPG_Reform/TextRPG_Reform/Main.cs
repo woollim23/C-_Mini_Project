@@ -43,7 +43,6 @@ namespace TextRPG_Reform
 
             // ------------------- 게임 플레이 -------------------
             gameManager.GamePlay(user, gameItem);
-            
         }
     }
 }

@@ -30,8 +30,8 @@ namespace TextRPG_Reform
         public int Gold { get; set; } // 골드
         public int ClearCount { get; set; } // 던전 클리어 횟수
 
-        public bool EquipArmor { get; set; } // 장착 갑옷 이름
-        public bool EquipWeapon { get; set; } // 장착 무기 이름
+        public int EquipArmorStatusNum { get; set; } // 장착 갑옷 상태수치
+        public int EquipWeaponStatusNum { get; set; } // 장착 갑옷 상태수치
 
 
         // ------------------ 전사 고유 ------------------
@@ -61,8 +61,8 @@ namespace TextRPG_Reform
                 else
                     Console.Write("\n");
 
-                Console.WriteLine("방어력 : {0}", user.DefensivePower);
-                Console.WriteLine("공격력 : {0}", user.Attack);
+                Console.WriteLine("방어력 : {0} (+ {1})", user.DefensivePower, user.EquipArmorStatusNum);
+                Console.WriteLine("공격력 : {0} (+ {1})", user.Attack, user.EquipWeaponStatusNum);
                 Console.WriteLine("체  력 : {0}", user.Health);
                 Console.WriteLine("골  드 : {0} G", user.Gold);
                 Console.WriteLine();
@@ -85,8 +85,6 @@ namespace TextRPG_Reform
             }
         }
 
-
-
         public RPGUser()
         {
             this.Name = "홍길동";
@@ -101,8 +99,8 @@ namespace TextRPG_Reform
             this.Gold = 1500;
             this.ClearCount = 0;
 
-            this.EquipArmor = true;
-            this.EquipWeapon = true;
-        }
+            this.EquipArmorStatusNum = 0; // 장착 갑옷 상태수치
+            this.EquipWeaponStatusNum = 0; // 장착 갑옷 상태수치
+    }
     }
 }
