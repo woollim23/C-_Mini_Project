@@ -9,7 +9,7 @@ namespace TextRPG_Reform
     public class Action
     {
         // 휴식 메소드
-        public void UseRest(RPGUser user)
+        public void UseRest(User user)
         {
             bool exit = false;
             while (!exit)
@@ -36,9 +36,9 @@ namespace TextRPG_Reform
                         exit = true;
                         break;
                     case 1:
-                        // 아이템 구매
                         if (user.Gold >= 500)
                         {
+                            // 휴식 구매
                             Console.Clear();
                             Console.WriteLine("휴식을 완료했습니다.");
                             user.Gold -= 500;
@@ -47,6 +47,7 @@ namespace TextRPG_Reform
                         }
                         else
                         {
+                            // 휴식 구매 실패
                             Console.Clear();
                             Console.WriteLine("골드가 부족합니다.");
                             Console.WriteLine($"[부족한 골드] : {500 - user.Gold} G");
@@ -60,27 +61,26 @@ namespace TextRPG_Reform
             }
         }
         // 던전 메소드
-        public void Dungeon(RPGUser user)
+        public void Dungeon(User user)
         {
             bool exit = false;
             while (!exit)
             {
-                int reward = 0; // 보상
-                int recomDef = 0;  // 권장 방어력
+                int sumDef = user.DefensivePower + user.EquipArmorStatusNum; // 유저 방어력 합계, 유저 방어력 + 아이템 방어력
 
                 Console.Clear();
 
                 Console.WriteLine("[던전]");
                 Console.WriteLine("입장할 난이도를 선택해주세요.");
                 Console.WriteLine();
-                Console.WriteLine($"[레벨] : {user.Level} Lv  [방어력] : {user.DefensivePower}  [골드] : {user.Gold} G");
+                Console.WriteLine($"[레벨] : {user.Level} Lv  [방어력] : {sumDef}  [골드] : {user.Gold} G");
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine("[난이도]");
                 Console.WriteLine();
-                Console.WriteLine($"1. 쉬움    | 권장 방어력 : {user.DefensivePower - 5}    | 보상 : 1000 G");
-                Console.WriteLine($"2. 적정    | 권장 방어력 : {user.DefensivePower}    | 보상 : 1700 G");
-                Console.WriteLine($"3. 어려움  | 권장 방어력 : {user.DefensivePower + 5}    | 보상 : 2500 G");
+                Console.WriteLine($"1. 쉬움    | 권장 방어력 : {sumDef - 5}    | 보상 : 1000 G");
+                Console.WriteLine($"2. 적정    | 권장 방어력 : {sumDef}    | 보상 : 1700 G");
+                Console.WriteLine($"3. 어려움  | 권장 방어력 : {sumDef + 5}    | 보상 : 2500 G");
                 Console.WriteLine("0. 나가기");
                 Console.WriteLine();
                 Console.WriteLine("원하시는 행동을 입력해주세요.");
@@ -88,6 +88,8 @@ namespace TextRPG_Reform
 
                 int select = InputCheck.Check(0, 3);
 
+                int reward = 0; // 보상
+                int gapDef = 0;  // 방어력 차이
                 Random random = new Random();
                 // 던전 난이도에 따라 보상, 권장 난이도 설정
                 switch (select)
@@ -96,19 +98,19 @@ namespace TextRPG_Reform
                         exit = true;
                         break;
                     case 1:
-                        recomDef = user.DefensivePower - 5;
+                        gapDef = 5;
                         reward = 1000;
 
                         break;
                     case 2:
-                        recomDef = user.DefensivePower;
+                        gapDef = 0;
                         reward = 1700;
                         break;
                     case 3:
                         // 40% 확률로 실패 계산, 성공해도 체력 차감에 따라 승패가 갈린다
                         if (random.Next(1, 100) <= 40)
                             user.IsDead = true;
-                        recomDef = user.DefensivePower + 5;
+                        gapDef = -5;
                         reward = 2500;
                         break;
                     default:
@@ -118,9 +120,7 @@ namespace TextRPG_Reform
 
                 if (exit == true) break;
 
-                int gap = user.DefensivePower - recomDef; // 유저 방어력 - 권장 방어력
-
-                user.Health -= random.Next((20 - gap), (35 - gap)); // 남는 체력 계산
+                user.Health -= random.Next((20 - gapDef), (35 - gapDef)); // 남는 체력 계산
 
                 // 체력이 0 이하면 실패
                 if (user.Health <= 0 || user.IsDead == true)
@@ -154,7 +154,7 @@ namespace TextRPG_Reform
             }
         }
         // 레벨업 유효 검사 메소드
-        public void LevelUp(RPGUser user)
+        public void LevelUp(User user)
         {
             if (user.Level == user.ClearCount)
             {

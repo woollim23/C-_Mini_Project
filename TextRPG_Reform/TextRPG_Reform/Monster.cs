@@ -10,7 +10,7 @@ namespace TextRPG_Reform
     public class Monster : ICharacter
     {
         public String Name { get; set; } // 이름
-        public String Tribe { get; set; } // 종족 : RPGUser or Monster
+        public String Tribe { get; set; } // 종족 : User or Monster
         public int Health { get; set; } // HP
         public bool IsDead { get; set; } // 생존여부
         public int Attack { get; set; } // 공격력

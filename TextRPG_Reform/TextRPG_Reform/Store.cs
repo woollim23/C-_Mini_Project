@@ -9,7 +9,7 @@ namespace TextRPG_Reform
     public class Store
     {
         // 상점 이용 메소드
-        public void UseStore(RPGUser user, Item gameItem)
+        public void UseStore(User user, Item gameItem)
         {
             bool exit = false;
             while (!exit)
@@ -69,7 +69,7 @@ namespace TextRPG_Reform
         }
 
         // 아이템 구매 메소드
-        public void BuyItem(RPGUser user, Item gameItem)
+        public void BuyItem(User user, Item gameItem)
         {
             bool exit = false;
             while (!exit)
@@ -145,7 +145,7 @@ namespace TextRPG_Reform
         }
 
         // 아이템 판매 메소드
-        public void SellItem(RPGUser user, Item gameItem)
+        public void SellItem(User user, Item gameItem)
         {
             bool exit = false;
             while (!exit)
@@ -218,7 +218,7 @@ namespace TextRPG_Reform
         }
 
         // 상점 이용 메소드 - 도둑 이스터에그
-        public void UseStore_Thief(RPGUser user, Item gameItem)
+        public void UseStore_Thief(User user, Item gameItem)
         {
             bool exit = false;
             while (!exit)
@@ -282,7 +282,7 @@ namespace TextRPG_Reform
         }
 
         // 아이템 구매 메소드 - 도둑 이스터에그
-        public void BuyItem_Thief(RPGUser user, Item gameItem)
+        public void BuyItem_Thief(User user, Item gameItem)
         {
             bool exit = false;
             while (!exit)

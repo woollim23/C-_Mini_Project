@@ -30,7 +30,7 @@ namespace TextRPG_Reform
         }
 
         // 시작창 메소드
-        public void StartScreen(RPGUser user)
+        public void StartScreen(User user)
         {
             // ------------------- 시작창 -------------------
             Console.WriteLine("[계정 생성]");
@@ -47,14 +47,14 @@ namespace TextRPG_Reform
         }
 
         // 캐릭터선택창 메소드
-        public void ChoiceUserClass(RPGUser user)
+        public void ChoiceUserClass(User user)
         {
             // ---------------- 캐릭터 직업 선택 -------------------
             while (true)
             {
                 Console.Clear();
                 Console.WriteLine("[직업 선택]");
-                // 종족 선택
+                // 직업 선택
                 Console.WriteLine("직업을 선택해주세요.(해당 번호 입력)");
                 Console.WriteLine();
                 Console.WriteLine("1. 전사");
@@ -82,7 +82,7 @@ namespace TextRPG_Reform
             }
         }
 
-        public void GamePlay(RPGUser user, Item gameItem)
+        public void GamePlay(User user, Item gameItem)
         {
             GameManager gameManager = new GameManager();
             Inventory inventory = new Inventory();
@@ -93,7 +93,7 @@ namespace TextRPG_Reform
             {
                 Console.Clear();
 
-                Console.WriteLine($"스파르타 마을에 오신 {user.Name} 님 환영합니다.\r\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
+                Console.WriteLine($"스파르타 마을에 오신 {user.Name} 님 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.\n");
                 Console.WriteLine("1. 상태보기");
                 Console.WriteLine("2. 인벤토리");
                 Console.WriteLine("3. 상점");
@@ -152,7 +152,7 @@ namespace TextRPG_Reform
         }
 
         // 게임 데이터 저장 메소드
-        public void GameSave(RPGUser user, Item gameItem)
+        public void GameSave(User user, Item gameItem)
         {
             Console.Clear();
 

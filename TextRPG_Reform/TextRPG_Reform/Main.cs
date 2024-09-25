@@ -11,11 +11,11 @@ namespace TextRPG_Reform
     {
         static void Main(string[] args)
         {
-            // ------------------- 게임 시작전 데이터 관리  -------------------
+            // ------------------- 게임 시작 전 데이터 관리  -------------------
             // 객체생성
             GameManager gameManager = new GameManager();
 
-            RPGUser user;
+            User user;
             Item gameItem;
 
             // 로딩창
@@ -28,13 +28,13 @@ namespace TextRPG_Reform
                 string jsonData2 = File.ReadAllText(gameManager.filePath2); // 아이템 정보
 
                 // 객체 생성, 데이터 불러오기
-                user = JsonConvert.DeserializeObject<RPGUser>(jsonData1);
+                user = JsonConvert.DeserializeObject<User>(jsonData1);
                 gameItem = JsonConvert.DeserializeObject<Item>(jsonData2);
             }
             else // 없으면 이름부터 적기
             {
                 // 객체 생성
-                user = new RPGUser();
+                user = new User();
                 gameItem = new Item();
                 gameItem.AddItem();
                 // 최초 시작창

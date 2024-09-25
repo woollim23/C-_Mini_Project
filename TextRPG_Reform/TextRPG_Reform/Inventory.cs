@@ -9,7 +9,7 @@ namespace TextRPG_Reform
     public class Inventory
     {
         // 인벤토리 메소드
-        public void SeeInventory(RPGUser user, Item gameItem)
+        public void SeeInventory(User user, Item gameItem)
         {
             bool exit = false;
             while (!exit)
@@ -29,7 +29,7 @@ namespace TextRPG_Reform
                     {
                         Console.Write($"- {itemCount++} ");
                         Console.Write($"{gameItem.item[i].name}");
-                        if (gameItem.item[i].equip == true)
+                        if (gameItem.item[i].equip == true) // 장착하고 있다면 [E]
                             Console.Write("[E]");
                         else
                             Console.Write("\t");
@@ -66,7 +66,7 @@ namespace TextRPG_Reform
         }
 
         // 장착관리 메소드
-        public void ItemEquip(RPGUser user, Item gameItem)
+        public void ItemEquip(User user, Item gameItem)
         {
             Inventory inventory = new Inventory();
             bool exit = false;
@@ -112,7 +112,7 @@ namespace TextRPG_Reform
                 else
                 {
                     int nCnt = 0;
-                    while (true) // 아이템 배열에서 선택된 아이템 찾는 중
+                    while (true) // 아이템 배열에서 선택된 아이템 찾는 중, nCnt에 해당 인덱스 저장
                     {
                         if (select == gameItem.item[nCnt].listNum)
                             break;
@@ -154,7 +154,7 @@ namespace TextRPG_Reform
                                 }
                             }
                         }
-                        //지금 장착한 아이템에 관련된 후처리
+                        // EquipArmorStatusNum -> 유저가 장착한 방어구 수치 저장 변수
                         gameItem.item[nCnt].equip = true;
                         if (gameItem.item[nCnt].effect == "방어력")
                         {

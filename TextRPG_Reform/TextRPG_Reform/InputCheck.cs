@@ -23,7 +23,7 @@ namespace TextRPG_Reform
                     return -1;
                 }
             }
-            catch (Exception) // C#에 이미 있는 포맷 입력한 데이터 형식이 잘못 되었을 때 실행
+            catch (Exception)
             {
                 Console.Clear();
                 Console.WriteLine("잘못된 입력입니다.");

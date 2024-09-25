@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace TextRPG_Reform
 {
     // 플레이어 클래스
-    public class RPGUser : ICharacter, IRPGUser
+    public class User : ICharacter, IUser
     {
         // ------------------ 캐릭터 인터페이스 공통 ------------------
         public String Name { get; set; } // 이름
@@ -42,7 +42,7 @@ namespace TextRPG_Reform
         }
 
         // 상태창 메소드
-        public void State(RPGUser user, Item item)
+        public void State(User user, Item item)
         {
 
             bool exit = false;
@@ -85,7 +85,7 @@ namespace TextRPG_Reform
             }
         }
 
-        public RPGUser()
+        public User()
         {
             this.Name = "홍길동";
             this.Tribe = "인간";
