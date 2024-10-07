@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TextRPG_Reform
+﻿namespace TextRPG_Reform
 {
     public class Store
     {
@@ -140,7 +134,6 @@ namespace TextRPG_Reform
                         }
                     }
                 }
-
             }
         }
 

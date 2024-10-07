@@ -17,6 +17,7 @@ namespace TextRPG_Reform
         public bool IsDead { get; set; } // 생존여부
         public int Attack { get; set; } // 공격력
 
+
         public void TakeDamage(int damage) // 피해 입었을 때
         {
             Health -= damage;
@@ -44,7 +45,6 @@ namespace TextRPG_Reform
         // 상태창 메소드
         public void State(User user, Item item)
         {
-
             bool exit = false;
             while (!exit)
             {
@@ -80,7 +80,6 @@ namespace TextRPG_Reform
                         break;
                     default:
                         continue;
-
                 }
             }
         }

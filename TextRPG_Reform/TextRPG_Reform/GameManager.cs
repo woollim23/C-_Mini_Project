@@ -84,7 +84,6 @@ namespace TextRPG_Reform
 
         public void GamePlay(User user, Item gameItem)
         {
-            GameManager gameManager = new GameManager();
             Inventory inventory = new Inventory();
             Store store = new Store();
             Action action = new Action();
@@ -110,7 +109,7 @@ namespace TextRPG_Reform
                 {
                     case 0:
                         // 게임종료
-                        gameManager.GameSave(user, gameItem);
+                        GameSave(user, gameItem);
                         Console.WriteLine("--------------------------------------");
                         Console.WriteLine("|                                    |");
                         Console.WriteLine("|     플레이 해주셔서 감사합니다!    |");
@@ -143,7 +142,7 @@ namespace TextRPG_Reform
                         break;
                     case 6:
                         // 게임저장
-                        gameManager.GameSave(user, gameItem);
+                        GameSave(user, gameItem);
                         break;
                     default:
                         continue;
